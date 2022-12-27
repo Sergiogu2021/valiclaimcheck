@@ -1,7 +1,7 @@
 <template>
     <b-card style="max-width: 35rem" class="mb-2">
         <template #header>
-            <h4 class="my-2">Validator Claims Check</h4>
+            <h4 class="my-2 text-center">Validator Claims Check</h4>
         </template>
         <b-card-text>
             We know Validator dApp is currently in a super super alpha stage, we can't
