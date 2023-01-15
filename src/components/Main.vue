@@ -1,12 +1,10 @@
 <template>
     <b-card style="max-width: 35rem" class="mb-2">
+        <!-- <img src="../assets/logoVC.png" alt="Logo" class="card-img-top"> -->
         <template #header>
             <h4 class="my-2 text-center">Validator Claims Check</h4>
         </template>
         <b-card-text>
-            We know Validator dApp is currently in a super super alpha stage, we can't
-            trust on what we see in its Dashboard. The best way to make sure your
-            rewards are OK is to check your claiming history. <br />
             Just enter your public address and click Submit. The app will check your
             transactions and display the results. If the amount received does not
             match the amount it should be (based on the days lapsed from the last
@@ -25,21 +23,28 @@
         </b-card-text>
         <b-link href="https://forms.gle/GPrVobR7jMv5dQGn6" class="card-link">Link to Form</b-link>
         <b-form-input v-model="address" placeholder="Enter your address" class="mt-4"></b-form-input>
+        <b-button class="mt-2" v-on:click="submit" variant="primary">Analyze Claims</b-button>
         <br />
-        <b-button v-on:click="submit" variant="primary">Submit</b-button>
-        <br />
+
         <b-list-group class="mt-2">
             <b-list-group-item v-for="item in redlc" :key="item.dateTime">
                 {{ item.dateTime }} -> {{ item.redlc }} {{ item.good }}
             </b-list-group-item>
         </b-list-group>
+        
         <div v-if="end" class="mt-2">
             <h3>Total Claimed: {{ total }}</h3>
             <h6>
                 Should be: {{ totalRewards }} ({{ (total - totalRewards) / 8 }} days)
             </h6>
-            <p>(Assuming your very first claim was correct)</p>
         </div>
+
+        <Datepicker class="mt-4" v-model="date" range />
+        <b-button class="mt-2"
+            :to="'https://beta.redlightscan.finance/api/addresses/' + address + '/transactions/export?address=' + address + '&startTime=' + Date.parse(date[0])/1000 + '&endTime=' + Date.parse(date[1])/1000"
+            variant="primary">
+            Download All Txns
+        </b-button>
         <template #footer>
             <em>For any question you can contact me in our Telegram group: Neomorph</em>
         </template>
@@ -47,7 +52,11 @@
 </template>
 
 <script>
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 export default {
+    components: { Datepicker },
     data() {
         return {
             address: "",
@@ -55,11 +64,15 @@ export default {
             total: 0,
             totalRewards: 0,
             end: false,
+            date: ''
         };
     },
 
     mounted() {
         this.address = localStorage.getItem("address") || "";
+        const startDate = new Date('August 1, 2022 00:00:00');
+        const endDate = new Date(Date.now());
+        this.date = [startDate, endDate];
     },
 
     methods: {
@@ -165,5 +178,11 @@ ul {
 
 li {
     margin: 0 10px;
+}
+
+.downloadLink {
+    color: var(--bs-link-color);
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>
