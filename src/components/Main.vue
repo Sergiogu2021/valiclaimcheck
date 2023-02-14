@@ -54,7 +54,6 @@
 <script>
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import { differenceInBusinessDays } from 'date-fns';
 
 export default {
     components: { Datepicker },
