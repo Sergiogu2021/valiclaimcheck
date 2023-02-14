@@ -35,7 +35,7 @@
         <div v-if="end" class="mt-2">
             <h3>Total Claimed: {{ total }}</h3>
             <h6>
-                Should be: {{ totalRewards }} ({{ (total - totalRewards) / 8 }} days)
+                Should be: {{ totalRewards }} ({{ differenceInDays }} days)
             </h6>
         </div>
 
@@ -54,6 +54,7 @@
 <script>
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { differenceInBusinessDays } from 'date-fns';
 
 export default {
     components: { Datepicker },
@@ -73,6 +74,13 @@ export default {
         const startDate = new Date('August 1, 2022 00:00:00');
         const endDate = new Date(Date.now());
         this.date = [startDate, endDate];
+    },
+
+    computed: {
+        differenceInDays() {
+            const diff = (this.total - this.totalRewards) / 8
+            return diff > 0 ? `+ ${diff}` : diff;
+        }
     },
 
     methods: {
@@ -106,10 +114,11 @@ export default {
                 const method = splitLine[12].trim();
                 const tx = splitLine[0];
                 const dateTime = splitLine[3];
+                const status = splitLine[10]
 
                 // Get internal transactions only from Claim actions
                 // Some tx comes repeated multiple times so verify this tx is different
-                if ((method === "0xae169a50") & (tx !== prevTx)) {
+                if ((method === "0xae169a50") & (tx !== prevTx) & (status === 'success')) {
                     const response = await fetch(
                         `https://beta.redlightscan.finance/api/transactions/${tx}/internalTransactions`
                     );
