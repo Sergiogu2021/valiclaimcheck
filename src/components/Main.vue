@@ -16,12 +16,7 @@
             started producing. If you're unlucky and it wasn't, sorry, I don't know
             when it was.
             <br />
-            <br />
-            As a personal recommendation, do not fill a form with every single error.
-            Wait around a month and then make your request. It will facilitate the
-            work of devs and we'll probaly get faster responses.
         </b-card-text>
-        <b-link href="https://forms.gle/GPrVobR7jMv5dQGn6" class="card-link">Link to Form</b-link>
         <b-form-input v-model="address" placeholder="Enter your address" class="mt-4"></b-form-input>
         <b-button class="mt-2" v-on:click="submit" variant="primary">Analyze Claims</b-button>
         <br />
